@@ -1,12 +1,13 @@
 package com.rafaelrodrigues.cursomc.domain;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 public class Category implements Serializable {
@@ -17,6 +18,9 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+
+    @ManyToMany(mappedBy = "categories")
+    private List<Product> products = new ArrayList<>();
 
     public Category() {
     }
@@ -42,6 +46,21 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void addProducts(List products){
+        this.products.addAll(products);
+    }
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -57,4 +76,6 @@ public class Category implements Serializable {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+
 }
