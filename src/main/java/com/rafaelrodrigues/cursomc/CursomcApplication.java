@@ -1,9 +1,13 @@
 package com.rafaelrodrigues.cursomc;
 
 import com.rafaelrodrigues.cursomc.domain.Category;
+import com.rafaelrodrigues.cursomc.domain.City;
 import com.rafaelrodrigues.cursomc.domain.Product;
+import com.rafaelrodrigues.cursomc.domain.State;
 import com.rafaelrodrigues.cursomc.repositories.CategoryRespository;
+import com.rafaelrodrigues.cursomc.repositories.CityRepository;
 import com.rafaelrodrigues.cursomc.repositories.ProductRepository;
+import com.rafaelrodrigues.cursomc.repositories.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +23,12 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProductRepository productRepository;
+
+	@Autowired
+	private StateRepository stateRepository;
+
+	@Autowired
+	private CityRepository cityRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -41,7 +51,19 @@ public class CursomcApplication implements CommandLineRunner {
 		product2.addCategories(Arrays.asList(cat1, cat2));
 		product3.addCategory(cat1);
 
+		State state1 = new State(null, "Minas Gerais");
+		State state2 = new State(null, "São Paulo");
+
+		City city1 = new City(null, "Uberlandia", state1);
+		City city2 = new City(null, "São Paulo", state2);
+		City city3 = new City(null, "Campinas", state2);
+
+		state1.addCity(city1);
+		state2.addCities(Arrays.asList(city2, city3));
+
 		categoryRespository.saveAll(Arrays.asList(cat1,cat2));
 		productRepository.saveAll(Arrays.asList(product1, product2, product3));
+		stateRepository.saveAll(Arrays.asList(state1,state2));
+		cityRepository.saveAll(Arrays.asList(city1,city2,city3));
 	}
 }
