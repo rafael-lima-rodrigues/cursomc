@@ -1,5 +1,6 @@
 package com.rafaelrodrigues.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rafaelrodrigues.cursomc.domain.enums.CustomerType;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class Customer implements Serializable {
     private String cpfOrCnpj;
     private Integer type;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "customer")
     private List<Address> addresses = new ArrayList<>();
 
@@ -84,7 +86,7 @@ public class Customer implements Serializable {
         this.addresses = addresses;
     }
 
-    public void addAllAddresses(List addresses){
+    public void addAllAddresses(List<Address> addresses) {
         this.addresses.addAll(addresses);
     }
 
@@ -100,19 +102,15 @@ public class Customer implements Serializable {
         this.phones = phones;
     }
 
-    public void addAllPhones(List phones){
+    public void addAllPhones(List<String> phones) {
         this.phones.addAll(phones);
-    }
-
-    public void AddPhone(String phone){
-        this.phones.add(phone);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
+        var customer = (Customer) o;
         return Objects.equals(id, customer.id);
     }
 

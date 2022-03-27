@@ -1,5 +1,7 @@
 package com.rafaelrodrigues.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ public class State implements Serializable {
     private Integer id;
     private String name;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "state")
     private List<City> cities = new ArrayList<>();
 
@@ -55,14 +58,15 @@ public class State implements Serializable {
         this.cities.add(city);
     }
 
-    public void addCities(List cities) {
+    public void addCities(List<City> cities) {
         this.cities.addAll(cities);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        State state = (State) o;
+        var state = (State) o;
         return Objects.equals(id, state.id);
     }
 

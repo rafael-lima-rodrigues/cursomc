@@ -1,5 +1,7 @@
 package com.rafaelrodrigues.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,6 +20,7 @@ public class Address implements Serializable {
     private String district;
     private String zipCode;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -26,9 +29,19 @@ public class Address implements Serializable {
     @JoinColumn(name = "city_id")
     private City city;
 
-    public Address(){};
+    public Address() {
+    }
 
-    public Address(Integer id, String street, String number, String complement, String district, String zipCode, Customer customer, City city) {
+    public Address(
+            Integer id,
+            String street,
+            String number,
+            String complement,
+            String district,
+            String zipCode,
+            Customer customer,
+            City city
+    ) {
         this.id = id;
         this.street = street;
         this.number = number;
@@ -107,7 +120,7 @@ public class Address implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
+        var address = (Address) o;
         return Objects.equals(id, address.id);
     }
 
