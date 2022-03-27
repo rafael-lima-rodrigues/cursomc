@@ -28,7 +28,11 @@ public class Customer implements Serializable {
     @CollectionTable(name = "PHONE")
     private Set<String> phones = new HashSet<>();
 
-    public Customer(){}
+    @OneToMany(mappedBy = "customer")
+    private List<Demand> demands = new ArrayList<>();
+
+    public Customer() {
+    }
 
     public Customer(Integer id, String name, String email, String cpfOrCnpj, CustomerType type) {
         this.id = id;
@@ -86,11 +90,19 @@ public class Customer implements Serializable {
         this.addresses = addresses;
     }
 
+    public List<Demand> getDemands() {
+        return demands;
+    }
+
+    public void setDemands(List<Demand> demands) {
+        this.demands = demands;
+    }
+
     public void addAllAddresses(List<Address> addresses) {
         this.addresses.addAll(addresses);
     }
 
-    public void addAddress(Address address){
+    public void addAddress(Address address) {
         this.addresses.add(address);
     }
 
@@ -117,5 +129,9 @@ public class Customer implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void addOrders(List<Demand> demands) {
+        this.demands.addAll(demands);
     }
 }

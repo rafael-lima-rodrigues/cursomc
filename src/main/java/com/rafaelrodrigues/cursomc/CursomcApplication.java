@@ -2,12 +2,14 @@ package com.rafaelrodrigues.cursomc;
 
 import com.rafaelrodrigues.cursomc.domain.*;
 import com.rafaelrodrigues.cursomc.domain.enums.CustomerType;
+import com.rafaelrodrigues.cursomc.domain.enums.PaymentStatus;
 import com.rafaelrodrigues.cursomc.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -31,12 +33,18 @@ public class CursomcApplication implements CommandLineRunner {
 	@Autowired
 	private AddressRepository addressRepository;
 
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Autowired
+	private PaymentRepository paymentRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
 
 	@Override
-	public void run(String... args) {
+	public void run(String... args) throws Exception {
 
 		var cat1 = new Category(null, "Informatic");
 		var cat2 = new Category(null, "Office");
@@ -66,11 +74,25 @@ public class CursomcApplication implements CommandLineRunner {
 		var address2 = new Address(null, "Avenida Matos", "105", "Apto 45", "Centro", "38220820", customer1, city2);
 		customer1.addAllAddresses(Arrays.asList(address1, address2));
 
+
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2));
 		productRepository.saveAll(Arrays.asList(product1, product2, product3));
 		stateRepository.saveAll(Arrays.asList(state1, state2));
 		cityRepository.saveAll(Arrays.asList(city1, city2, city3));
 		customerRepository.save(customer1);
 		addressRepository.saveAll(Arrays.asList(address1, address2));
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		var order1 = new Demand(null, sdf.parse("30/09/2017 10:32"), customer1, address1);
+		var order2 = new Demand(null, sdf.parse("10/10/2017 10:32"), customer1, address2);
+
+		var payment1 = new CardPayment(null, PaymentStatus.PAID, order1, 6);
+		order1.setPayment(payment1);
+		var payment2 = new PaymentSlip(null, PaymentStatus.PENDING, order2, sdf.parse("20/10/2017 00:00"), null);
+		order2.setPayment(payment2);
+
+		customer1.addOrders(Arrays.asList(order1, order2));
+		orderRepository.saveAll(Arrays.asList(order1, order2));
+		paymentRepository.saveAll(Arrays.asList(payment1, payment2));
 	}
 }
