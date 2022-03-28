@@ -35,7 +35,7 @@ public class CursomcApplication implements CommandLineRunner {
 	private AddressRepository addressRepository;
 
 	@Autowired
-	private OrderRepository orderRepository;
+	private DemandRepository demandRepository;
 
 	@Autowired
 	private PaymentRepository paymentRepository;
@@ -96,7 +96,7 @@ public class CursomcApplication implements CommandLineRunner {
 		demand2.setPayment(payment2);
 
 		customer1.addOrders(Arrays.asList(demand1, demand2));
-		orderRepository.saveAll(Arrays.asList(demand1, demand2));
+		demandRepository.saveAll(Arrays.asList(demand1, demand2));
 		paymentRepository.saveAll(Arrays.asList(payment1, payment2));
 
 		var demandItem1 = new DemandItem(demand1, product1, 0.00, 1, 2000.00);

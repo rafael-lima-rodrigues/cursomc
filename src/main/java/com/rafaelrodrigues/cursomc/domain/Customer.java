@@ -1,5 +1,6 @@
 package com.rafaelrodrigues.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rafaelrodrigues.cursomc.domain.enums.CustomerType;
 
@@ -28,6 +29,7 @@ public class Customer implements Serializable {
     @CollectionTable(name = "PHONE")
     private Set<String> phones = new HashSet<>();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "customer")
     private List<Demand> demands = new ArrayList<>();
 
