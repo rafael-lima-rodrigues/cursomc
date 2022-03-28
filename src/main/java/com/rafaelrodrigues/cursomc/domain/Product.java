@@ -4,16 +4,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Entity
 public class Product implements Serializable {
 
-    private  static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +26,25 @@ public class Product implements Serializable {
     )
     private List<Category> categories = new ArrayList<>();
 
-    public Product(){}
+    @OneToMany(mappedBy = "id.product")
+    private Set<DemandItem> items = new HashSet<>();
 
-    public Product(Integer id, String name, Double price){
+    public Product() {
+    }
+
+    public Product(Integer id, String name, Double price) {
         super();
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    public List<Demand> getDemands() {
+        List<Demand> demandList = new ArrayList<>();
+        for (DemandItem demandItem : items) {
+            demandList.add(demandItem.getDemand());
+        }
+        return demandList;
     }
 
     public Integer getId() {
@@ -71,12 +79,24 @@ public class Product implements Serializable {
         this.categories = categories;
     }
 
-    public void addCategories(List categories){
+    public void addCategories(List categories) {
         this.categories.addAll(categories);
     }
 
-    public void addCategory(Category category){
+    public void addCategory(Category category) {
         this.categories.add(category);
+    }
+
+    public Set<DemandItem> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<DemandItem> items) {
+        this.items = items;
+    }
+
+    public void addAllItems(List<DemandItem> demandItems) {
+        this.items.addAll(demandItems);
     }
 
     @Override

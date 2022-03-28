@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collections;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner {
@@ -38,6 +39,9 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private PaymentRepository paymentRepository;
+
+	@Autowired
+	private DemandItemRepository demandItemRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -83,16 +87,31 @@ public class CursomcApplication implements CommandLineRunner {
 		addressRepository.saveAll(Arrays.asList(address1, address2));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		var order1 = new Demand(null, sdf.parse("30/09/2017 10:32"), customer1, address1);
-		var order2 = new Demand(null, sdf.parse("10/10/2017 10:32"), customer1, address2);
+		var demand1 = new Demand(null, sdf.parse("30/09/2017 10:32"), customer1, address1);
+		var demand2 = new Demand(null, sdf.parse("10/10/2017 10:32"), customer1, address2);
 
-		var payment1 = new CardPayment(null, PaymentStatus.PAID, order1, 6);
-		order1.setPayment(payment1);
-		var payment2 = new PaymentSlip(null, PaymentStatus.PENDING, order2, sdf.parse("20/10/2017 00:00"), null);
-		order2.setPayment(payment2);
+		var payment1 = new CardPayment(null, PaymentStatus.PAID, demand1, 6);
+		demand1.setPayment(payment1);
+		var payment2 = new PaymentSlip(null, PaymentStatus.PENDING, demand2, sdf.parse("20/10/2017 00:00"), null);
+		demand2.setPayment(payment2);
 
-		customer1.addOrders(Arrays.asList(order1, order2));
-		orderRepository.saveAll(Arrays.asList(order1, order2));
+		customer1.addOrders(Arrays.asList(demand1, demand2));
+		orderRepository.saveAll(Arrays.asList(demand1, demand2));
 		paymentRepository.saveAll(Arrays.asList(payment1, payment2));
+
+		var demandItem1 = new DemandItem(demand1, product1, 0.00, 1, 2000.00);
+		var demandItem2 = new DemandItem(demand1, product3, 0.00, 2, 80.00);
+		var demandItem3 = new DemandItem(demand2, product2, 100.00, 1, 800.00);
+
+		demand1.addAllItems(Arrays.asList(demandItem1, demandItem2));
+		demand2.addAllItems(Collections.singletonList(demandItem3));
+
+		product1.addAllItems(Collections.singletonList(demandItem1));
+		product2.addAllItems(Collections.singletonList(demandItem3));
+		product3.addAllItems(Collections.singletonList(demandItem2));
+
+		demandItemRepository.saveAll(Arrays.asList(demandItem1, demandItem2, demandItem3));
+
+
 	}
 }

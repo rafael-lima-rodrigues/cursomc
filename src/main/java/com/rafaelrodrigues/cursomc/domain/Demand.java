@@ -2,8 +2,7 @@ package com.rafaelrodrigues.cursomc.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Demand implements Serializable {
@@ -25,6 +24,9 @@ public class Demand implements Serializable {
     @ManyToOne
     @JoinColumn(name = "delivery_Address_id")
     private Address address;
+
+    @OneToMany(mappedBy = "id.demand")
+    private Set<DemandItem> items = new HashSet<>();
 
     public Demand() {
     }
@@ -76,6 +78,18 @@ public class Demand implements Serializable {
         this.address = address;
     }
 
+    public Set<DemandItem> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<DemandItem> items) {
+        this.items = items;
+    }
+
+    public void addAllItems(List<DemandItem> demandItem) {
+        this.items.addAll(demandItem);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,4 +102,5 @@ public class Demand implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
