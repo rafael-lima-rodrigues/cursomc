@@ -4,12 +4,15 @@ import com.rafaelrodrigues.cursomc.domain.Category;
 import com.rafaelrodrigues.cursomc.dto.CategoryDTO;
 import com.rafaelrodrigues.cursomc.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +30,7 @@ public class CategoryResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> findAll(){
+    public ResponseEntity<List<CategoryDTO>> findAll() {
         List<CategoryDTO> list = categoryService
                 .findAll()
                 .stream()
@@ -36,8 +39,23 @@ public class CategoryResource {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping(value = "/page")
+    public ResponseEntity<Page<CategoryDTO>> findPage(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "24") Integer size,
+            @RequestParam(value = "orderBy", defaultValue = "name") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy, direction));
+        Page<CategoryDTO> list = categoryService
+                .findPage(pageable)
+                .map(CategoryDTO::new);
+        return ResponseEntity.ok().body(list);
+    }
+
     @PostMapping
-    public ResponseEntity<Void> insert(@RequestBody Category category){
+    public ResponseEntity<Void> insert(@RequestBody Category category) {
         category = categoryService.insert(category);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()

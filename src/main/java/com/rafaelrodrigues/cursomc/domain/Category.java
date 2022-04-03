@@ -28,6 +28,7 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+
     public Integer getId() {
         return id;
     }

@@ -5,6 +5,8 @@ import com.rafaelrodrigues.cursomc.repositories.CategoryRepository;
 import com.rafaelrodrigues.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,5 +56,12 @@ public class CategoryService {
 
     public List<Category> findAll() {
         return categoryRepository.findAll();
+    }
+
+    public Page<Category> findPage(Pageable pageable
+//            Integer page, Integer size, String orderBy, String direction
+    ) {
+//        PageRequest pageRequest = PageRequest.of(page,size, Sort.Direction.valueOf(direction), orderBy);
+        return categoryRepository.findAll(pageable);
     }
 }

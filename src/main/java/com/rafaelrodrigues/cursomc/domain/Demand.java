@@ -94,6 +94,10 @@ public class Demand implements Serializable {
         this.items.addAll(demandItem);
     }
 
+    public void addItem(DemandItem demandItem) {
+        this.items.add(demandItem);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

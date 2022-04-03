@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Collections;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner {
@@ -50,8 +49,13 @@ public class CursomcApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		var cat1 = new Category(null, "Informatic");
+		var cat1 = new Category(null, "Computer");
 		var cat2 = new Category(null, "Office");
+		var cat3 = new Category(null, "Bedding and Linens");
+		var cat4 = new Category(null, "Electronics");
+		var cat5 = new Category(null, "Garden");
+		var cat6 = new Category(null, "Decoration");
+		var cat7 = new Category(null, "Beauty");
 		var product1 = new Product(null, "Computer", 2000.00);
 		var product2 = new Product(null, "Printer", 800.00);
 		var product3 = new Product(null, "Mouse", 80.00);
@@ -59,7 +63,7 @@ public class CursomcApplication implements CommandLineRunner {
 		cat2.addProduct(product2);
 
 		product1.addCategory(cat1);
-		product2.addCategories(Arrays.asList(cat1, cat2));
+		product2.addAllCategories(Arrays.asList(cat1, cat2));
 		product3.addCategory(cat1);
 
 		var state1 = new State(null, "Minas Gerais");
@@ -79,7 +83,7 @@ public class CursomcApplication implements CommandLineRunner {
 		customer1.addAllAddresses(Arrays.asList(address1, address2));
 
 
-		categoryRepository.saveAll(Arrays.asList(cat1, cat2));
+		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		productRepository.saveAll(Arrays.asList(product1, product2, product3));
 		stateRepository.saveAll(Arrays.asList(state1, state2));
 		cityRepository.saveAll(Arrays.asList(city1, city2, city3));
@@ -104,11 +108,11 @@ public class CursomcApplication implements CommandLineRunner {
 		var demandItem3 = new DemandItem(demand2, product2, 100.00, 1, 800.00);
 
 		demand1.addAllItems(Arrays.asList(demandItem1, demandItem2));
-		demand2.addAllItems(Collections.singletonList(demandItem3));
+		demand2.addItem(demandItem3);
 
-		product1.addAllItems(Collections.singletonList(demandItem1));
-		product2.addAllItems(Collections.singletonList(demandItem3));
-		product3.addAllItems(Collections.singletonList(demandItem2));
+		product1.addItem(demandItem1);
+		product2.addItem(demandItem3);
+		product3.addItem(demandItem2);
 
 		demandItemRepository.saveAll(Arrays.asList(demandItem1, demandItem2, demandItem3));
 

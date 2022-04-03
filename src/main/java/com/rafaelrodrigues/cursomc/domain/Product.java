@@ -81,7 +81,7 @@ public class Product implements Serializable {
         this.categories = categories;
     }
 
-    public void addCategories(List categories) {
+    public void addAllCategories(List categories) {
         this.categories.addAll(categories);
     }
 
@@ -112,5 +112,9 @@ public class Product implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void addItem(DemandItem demandItem) {
+        this.items.add(demandItem);
     }
 }
