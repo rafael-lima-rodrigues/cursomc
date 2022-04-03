@@ -17,7 +17,7 @@ public class DemandResource {
     DemandService demandService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> list(@PathVariable Integer id) {
+    public ResponseEntity<Demand> list(@PathVariable Integer id) {
         Demand obj = demandService.findById(id);
         return ResponseEntity.ok().body(obj);
     }

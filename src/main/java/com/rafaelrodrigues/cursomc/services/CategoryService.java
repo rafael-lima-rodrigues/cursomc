@@ -25,4 +25,13 @@ public class CategoryService {
         category.setId(null);
         return categoryRepository.save(category);
     }
+
+    public Category update(Category category) {
+        if(!categoryRepository.existsById(category.getId())){
+            throw new ObjectNotFoundException(
+                    "Object not found! ID: " + category.getId() + ", Type: " + Category.class.getName()
+            );
+        }
+        return categoryRepository.save(category);
+    }
 }
