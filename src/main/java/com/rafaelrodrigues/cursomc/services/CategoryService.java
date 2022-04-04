@@ -1,6 +1,7 @@
 package com.rafaelrodrigues.cursomc.services;
 
 import com.rafaelrodrigues.cursomc.domain.Category;
+import com.rafaelrodrigues.cursomc.dto.CategoryDTO;
 import com.rafaelrodrigues.cursomc.repositories.CategoryRepository;
 import com.rafaelrodrigues.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,9 @@ public class CategoryService {
     ) {
 //        PageRequest pageRequest = PageRequest.of(page,size, Sort.Direction.valueOf(direction), orderBy);
         return categoryRepository.findAll(pageable);
+    }
+
+    public Category fromDTO(CategoryDTO categoryDTO) {
+        return new Category(categoryDTO.getId(), categoryDTO.getName());
     }
 }
